@@ -12,6 +12,7 @@ import { MicroTaskBoard } from "@/components/micro-task-board"
 import { InboxScreen } from "@/components/inbox-screen"
 import { ProfileScreen } from "@/components/profile-screen"
 import { PremiumModal } from "@/components/premium-modal"
+import { SmartContactList } from "@/components/smart-contact-list" // Import the new component
 
 type Screen = "home" | "search-results" | "business-profile"
 type AuthScreen = "onboarding" | "sign-in" | "sign-up" | "none"
@@ -25,7 +26,6 @@ export default function VodaPlugApp() {
   const [selectedBusinessId, setSelectedBusinessId] = useState<number | null>(null)
   const [showPremiumModal, setShowPremiumModal] = useState(false)
 
-  // Check if user has seen onboarding
   useEffect(() => {
     const hasSeenOnboarding = sessionStorage.getItem("vodaplug-onboarded")
     if (hasSeenOnboarding) {
@@ -42,13 +42,13 @@ export default function VodaPlugApp() {
   const handleSignInComplete = () => {
     sessionStorage.setItem("vodaplug-onboarded", "true")
     setAuthScreen("none")
-    setIsBasicUser(false) // Signed in users are not guests
+    setIsBasicUser(false)
   }
 
   const handleSignUpComplete = () => {
     sessionStorage.setItem("vodaplug-onboarded", "true")
     setAuthScreen("none")
-    setIsBasicUser(true) // New users start as Basic
+    setIsBasicUser(true)
   }
 
   const handleSearch = (query: string) => {
@@ -79,7 +79,6 @@ export default function VodaPlugApp() {
     setSelectedBusinessId(null)
   }
 
-  // Show auth screens
   if (authScreen === "onboarding") {
     return (
       <Onboarding
@@ -95,10 +94,7 @@ export default function VodaPlugApp() {
       <SignIn
         onBack={() => setAuthScreen("onboarding")}
         onSignInComplete={handleSignInComplete}
-        onForgotPassword={() => {
-          // Could add a forgot password flow here
-          alert("Forgot password flow would go here")
-        }}
+        onForgotPassword={() => {}}
       />
     )
   }
@@ -112,9 +108,7 @@ export default function VodaPlugApp() {
     )
   }
 
-  // Render current screen based on active tab
   const renderScreen = () => {
-    // Handle navigation for home tab with sub-screens
     if (activeTab === "home") {
       switch (currentScreen) {
         case "search-results":
@@ -144,15 +138,10 @@ export default function VodaPlugApp() {
       }
     }
 
-    // Other tabs
     switch (activeTab) {
       case "search":
-        return (
-          <div className="pb-20 pt-4 px-4">
-            <h1 className="text-2xl font-bold text-foreground mb-4">Search</h1>
-            <p className="text-muted-foreground">Use the search bar on the Home tab to find businesses and services.</p>
-          </div>
-        )
+        // UPDATED: Now renders the Smart Contact List
+        return <SmartContactList />
       case "tasks":
         return <MicroTaskBoard />
       case "inbox":

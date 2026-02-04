@@ -77,10 +77,13 @@ export function Onboarding({ onComplete, onSignIn, onSignUp }: OnboardingProps) 
       {/* Slide content */}
       <div className="flex-1 flex flex-col items-center justify-center max-w-sm text-center">
         {slide.isLogo ? (
-          <div className="mb-8">
-            <div className="w-24 h-24 bg-primary rounded-2xl flex items-center justify-center mb-6">
-              <span className="text-primary-foreground text-3xl font-bold">VP</span>
-            </div>
+          <div className="mb-8 flex flex-col items-center">
+            {/* Updated Logo Image */}
+            <img 
+              src="/voda_plug.png" 
+              alt="VodaPlug Logo" 
+              className="w-32 h-32 object-contain mb-6" 
+            />
             <h1 className="text-3xl font-bold text-foreground">{slide.title}</h1>
           </div>
         ) : (

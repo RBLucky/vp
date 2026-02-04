@@ -1,86 +1,70 @@
 "use client"
 
-import { X, Check, Sparkles } from "lucide-react"
+import { X, Check, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 
 interface PremiumModalProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const features = [
-  "Unlimited Connections & Searches",
-  "Top-Tier Search Placement",
-  "See Who's Viewed Your Profile",
-  "Advanced Analytics",
-]
-
 export function PremiumModal({ isOpen, onClose }: PremiumModalProps) {
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-
-      {/* Modal */}
-      <div className="relative bg-card w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 animate-in slide-in-from-bottom sm:slide-in-from-bottom-0 duration-300">
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-secondary transition-colors"
-          aria-label="Close modal"
-        >
-          <X className="w-5 h-5 text-muted-foreground" />
-        </button>
-
-        {/* Icon */}
-        <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <Sparkles className="w-8 h-8 text-primary" />
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md p-0 overflow-hidden bg-background border-none rounded-[2.5rem]">
+        <div className="relative h-48 bg-primary overflow-hidden">
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80')] opacity-20 bg-cover bg-center mix-blend-overlay" />
+          <div className="absolute top-0 right-0 p-12 bg-white/10 blur-3xl w-40 h-40 rounded-full" />
+          
+          <div className="relative z-10 h-full flex flex-col items-center justify-center text-white space-y-4">
+            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-xl">
+               {/* Updated Logo */}
+               <img src="/voda_plug.png" alt="Premium" className="w-10 h-10 object-contain" />
+            </div>
+            <h2 className="text-2xl font-black italic tracking-wide">VodaPlug Premium</h2>
+          </div>
+          
+          <button 
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 bg-black/20 rounded-full text-white/80 hover:bg-black/40 transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        {/* Title */}
-        <h2 className="text-2xl font-bold text-foreground text-center mb-6">
-          Go Premium with VodaPlug
-        </h2>
-
-        {/* Features */}
-        <ul className="space-y-3 mb-6">
-          {features.map((feature) => (
-            <li key={feature} className="flex items-center gap-3">
-              <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                <Check className="w-4 h-4 text-primary" />
+        <div className="p-8 space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-start gap-4">
+              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                <Check className="w-5 h-5 text-green-600" />
               </div>
-              <span className="text-foreground">{feature}</span>
-            </li>
-          ))}
-        </ul>
+              <div>
+                <h3 className="font-bold text-foreground">Unlimited Search</h3>
+                <p className="text-sm text-muted-foreground">Access the full directory without restrictions.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                <ShieldCheck className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-foreground">Verified Trust Score</h3>
+                <p className="text-sm text-muted-foreground">See detailed trust metrics for every business.</p>
+              </div>
+            </div>
+          </div>
 
-        {/* Pricing */}
-        <div className="bg-secondary rounded-xl p-4 mb-6 text-center">
-          <p className="text-sm text-muted-foreground mb-1">Monthly Subscription</p>
-          <div className="flex items-baseline justify-center gap-1">
-            <span className="text-4xl font-bold text-foreground">R99.00</span>
-            <span className="text-muted-foreground">/ per month</span>
+          <div className="pt-4">
+            <Button className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90 rounded-2xl shadow-xl glow-red">
+              Upgrade for R49/month
+            </Button>
+            <p className="text-center text-xs text-muted-foreground mt-4">
+              Cancel anytime. Secure payment via Vodapay.
+            </p>
           </div>
         </div>
-
-        {/* CTA */}
-        <Button
-          className="w-full h-12 text-base font-medium bg-primary hover:bg-primary/90 text-primary-foreground"
-          onClick={onClose}
-        >
-          Confirm & Pay with VodaPay
-        </Button>
-
-        <p className="text-xs text-muted-foreground text-center mt-4">
-          Cancel anytime. Terms and conditions apply.
-        </p>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }

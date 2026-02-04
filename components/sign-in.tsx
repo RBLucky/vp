@@ -1,12 +1,10 @@
 "use client"
 
-import React from "react"
-
 import { useState } from "react"
+import { ArrowLeft, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ArrowLeft, Eye, EyeOff, Loader2 } from "lucide-react"
 
 interface SignInProps {
   onBack: () => void
@@ -15,143 +13,64 @@ interface SignInProps {
 }
 
 export function SignIn({ onBack, onSignInComplete, onForgotPassword }: SignInProps) {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
-
-  const validateForm = () => {
-    const newErrors: { email?: string; password?: string } = {}
-    
-    if (!email) {
-      newErrors.email = "Email address is required"
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Please enter a valid email address"
-    }
-    
-    if (!password) {
-      newErrors.password = "Password is required"
-    } else if (password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters"
-    }
-    
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!validateForm()) return
-    
     setIsLoading(true)
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    setIsLoading(false)
-    onSignInComplete()
+    setTimeout(() => {
+      setIsLoading(false)
+      onSignInComplete()
+    }, 1500)
   }
 
   return (
-    <div className="fixed inset-0 bg-background flex flex-col z-50">
-      {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-border">
-        <button
-          onClick={onBack}
-          className="p-2 -ml-2 hover:bg-secondary rounded-full transition-colors"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="w-5 h-5 text-foreground" />
-        </button>
-        <h1 className="text-lg font-semibold text-foreground">Sign In</h1>
-      </div>
+    <div className="min-h-screen bg-background p-6 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <button 
+        onClick={onBack} 
+        className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-8 hover:bg-slate-200 transition-colors"
+      >
+        <ArrowLeft className="w-5 h-5 text-slate-700" />
+      </button>
 
-      {/* Content */}
-      <div className="flex-1 overflow-auto p-6">
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-4">
-            <span className="text-primary-foreground text-xl font-bold">VP</span>
+      <div className="flex-1 flex flex-col justify-center max-w-sm mx-auto w-full space-y-8">
+        <div className="text-center space-y-4">
+          <div className="flex justify-center mb-6">
+             <div className="w-24 h-24 bg-white rounded-[2rem] flex items-center justify-center shadow-xl border border-slate-100">
+                {/* Updated Logo */}
+                <img src="/voda_plug.png" alt="VodaPlug" className="w-16 h-16 object-contain" />
+             </div>
           </div>
-          <h2 className="text-2xl font-bold text-foreground">Welcome Back to VodaPlug</h2>
-          <p className="text-muted-foreground text-sm mt-1">Sign in to continue</p>
+          <h1 className="text-3xl font-black italic tracking-tight">Welcome Back</h1>
+          <p className="text-slate-500">Enter your credentials to access your professional network.</p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-foreground font-medium">
-              Email Address
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value)
-                if (errors.email) setErrors({ ...errors, email: undefined })
-              }}
-              className={`h-12 ${errors.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
-            />
-            {errors.email && (
-              <p className="text-sm text-destructive">{errors.email}</p>
-            )}
+            <Label htmlFor="email">Email / Phone</Label>
+            <Input id="email" type="email" placeholder="name@example.com" className="h-12 bg-slate-50 border-slate-200" required />
           </div>
-
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-foreground font-medium">
-              Password
-            </Label>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value)
-                  if (errors.password) setErrors({ ...errors, password: undefined })
-                }}
-                className={`h-12 pr-12 ${errors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label={showPassword ? "Hide password" : "Show password"}
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+              <button 
+                type="button" 
+                onClick={onForgotPassword}
+                className="text-xs text-primary font-bold hover:underline"
               >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                Forgot password?
               </button>
             </div>
-            {errors.password && (
-              <p className="text-sm text-destructive">{errors.password}</p>
-            )}
+            <Input id="password" type="password" className="h-12 bg-slate-50 border-slate-200" required />
           </div>
 
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={onForgotPassword}
-              className="text-sm text-[#007bff] hover:underline font-medium"
-            >
-              Forgot Password?
-            </button>
-          </div>
-
-          <Button
-            type="submit"
+          <Button 
+            type="submit" 
+            className="w-full h-14 text-lg font-bold bg-primary hover:bg-primary/90 rounded-2xl shadow-lg glow-red" 
             disabled={isLoading}
-            className="w-full h-12 text-base font-medium bg-primary hover:bg-primary/90 text-primary-foreground"
           >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Signing In...
-              </>
-            ) : (
-              "Sign In"
-            )}
+            {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Sign In"}
           </Button>
         </form>
       </div>
